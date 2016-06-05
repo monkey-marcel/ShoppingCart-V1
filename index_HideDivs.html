@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="en">
+<!--
+This page consists of two sections. A registration form on the left for customers and a product display area on the right.
+
+All necessary files are in the assets folder except for index.html and cart.html.
+
+Try to do everything in the list below but don't worry if you can't solve something, solve whatever you can. You will probably need to work together in order to do everything. There are many different levels of difficulty represented in this challenge.
+
+
+Stack Rank = Most Important is #1. and so on...
+
+1. Once a user registers once, hide the registration form. (HINT use LocalStorage).
+
+2. Add a Qty input field to the first product display, make sure you are actually capturing and saving that data along with the rest of the form which is already working.
+
+3. Delete the second and third products on index.html.
+
+4. Create an object to save your product information in. (what else besides description, productId and, price will you need to store in your object/array?)
+
+5. Now display the products using the one product that is on the page as a template to dynamically generate and display all the products that are in your object. You can use any combination of objects and arrays you want to solve the problem. The more OOP you use the better but there are many ways to solve this problem so start with whatever you can get that works then refine your code from there.
+
+6. Complete the save product information part of the script below.
+
+7. Create an empty cart button. if you were able to save product info when the user clicks add the remember you'll need to clear both the product info and count from localstorage.
+
+8. Add shipping information to the regsiter form
+
+9. Validate the form inputs
+
+10. Save that data along with the rest.
+
+
+
+-->
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" media="screen" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.5/css/bootstrap.min.css">
+
+    <title>Shopping Cart o matic</title>
+
+    <!--  -->
+<!-- You can use this as a place to test styles then move them to assets/scc/custom.css -->
+    <style>
+        .input_class {
+            border:none;
+            
+        }
+
+    </style>
+
+</head>
+<body>
+
+    <div class="container" style="margin-top:100px">
+
+   <!-- Signup Form  -->
+      
+        <div id="hiddenDiv"class="col-md-4">
+            
+            <label>First Name</label>
+            <input type="text" id="firstName" class="form-control"/>
+            <label>Last Name</label>
+            <input type="text" id="lastName" class="form-control"/>
+            <label>Email</label>
+            <input type="text" id="email" class="form-control" />
+            <label>Age</label>
+            <input type="text" id="age" class="form-control" /><br>
+            <label>Favorite Product Type</label>
+            <select id="favoriteProduct" class="form-control">
+                <option value="cameras" id="">Cameras</option>
+                <option value="clothing" id="">Clothing</option>
+                <option value="games" id="">Games</option>
+            </select><br>
+            <label>Country</label>
+            <select id="shipping" class="form-control">
+                <option value="United States" id="">United States / Shipping = $5.00</option>
+                <option value="Canada" id="">Canada / Shipping = $15.00</option>
+                <option value="Mexico" id="">Mexico / Shipping = $25.00</option>
+            </select>
+            <hr/>
+            <button class="btn btn-primary" onclick="hideDiv()">Register and Hide Div Plus Write Page and Save to Array</class></button><br><br>
+            <button class="btn btn-info" onclick="saveForm()">Save User Info to Local Storage</class></button><br><br>
+            <button class="btn btn-success" onclick="getForm()">Retrieve User Info from Local Storage</class></button>
+            <br/>
+            <hr/>
+           
+        </div>
+ 
+   <!--Cart Counter View Cart  -->
+        <div id="cartcount"></div> <a href="cart.html">View Cart</a>
+        <div class="col-md-6 pull-right">
+
+            <div class="col-md-4">
+   <!--Product 1  --> 
+                <img src="http://placehold.it/460x250/e67e22/ffffff&text=HTML5" class="img-responsive">
+                <div class="producttitle pull right">
+                    
+                    
+                <label>Product Name</label>
+                <input type="text" id="prodA" class="input_class" value="Ipad" readonly>
+                <label>Product Price</label>
+                <input type="text" id="prodPrice" class="input_class" value="$499" readonly>
+                <lable> Select Quantity:</lable>
+                <input type="number" id="quantA" name="quantity" min="1" max="100"></div><br>
+                <button class="btn btn-primary btn-sm" onclick="productCaptureA()">Write to Page and Save Product Info to Array</button><br><br>
+                <button class="btn btn-info btn-sm" onclick="saveCart()">Save Cart Info to Local Storage</button><br><br>
+                 <button class="btn btn-success btn-sm" onclick="getCart()">Retrieve Cart Info from Local Storage</button><br><br>
+                <button class="btn btn-warning btn-sm" onclick="emptyCart()">Empty Cart</button>
+                
+            </div>
+                </div>
+    </div>
+                <hr/>
+            </div>
+            <div class="col-md-4 pull-right">
+  <br><br><br> <br><br><br> <br><br><br>
+
+
+
+        </div>
+<br><br<br>
+<div id="formDemo" align="center"></div>
+                <br><br><br>
+ <div id="formDemo2" align="center"></div>
+<br><br><br>
+<div id="formDemo3" align="center"></div>
+<br><br><br>
+<div id="formDemo4" align="center"></div>     
+<br><br><br>
+<div id="form5" align="center"></div> 
+
+<br><br><br>
+<div id="form6" align="center"></div>
+<br><br><br>
+<div id="form7" align="center"></div>
+        
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.5/js/bootstrap.min.js"></script>
+
+
+
+    </div><!-- end container -->
+
+
+
+    <script>
+       
+         //first simple attempt to capture quantity and product info
+        
+        function productCaptureA() {
+       
+        captureProdA = document.getElementById("prodA").value;
+        captureProdPrice = document.getElementById("prodPrice").value;
+        captureQuant = document.getElementById("quantA").value;
+             
+        
+        
+        document.getElementById('formDemo2').innerHTML = "Customer Product Info:" + "<br>" + captureProdA + "<br>" + captureProdPrice + "<br>" + captureQuant;  
+            
+        cartArray.push(captureProdA,captureProdPrice,captureQuant);
+         
+        document.getElementById('formDemo4').innerHTML = cartArray;   
+        
+        
+        };
+        
+        
+        
+        // first simple attempt to hide div on user click:
+         function hideDiv() {
+        
+        var captureFirst = document.getElementById("firstName").value;
+        var captureLast = document.getElementById("lastName").value;
+        var captureEmail = document.getElementById("email").value;
+        var captureAge = document.getElementById("age").value;
+        var captureProduct = document.getElementById("favoriteProduct").value;
+             
+        if (captureFirst == null || captureFirst == ""){
+            
+            alert("First Name Field Must Be Filled Out");
+            return false;
+        }
+             if (captureLast == null || captureLast == ""){
+            
+            alert("Last Name Field Must Be Filled Out");
+            return false;
+        }
+             
+                 if (captureEmail == null || captureEmail == ""){
+            
+            alert("Email Name Field Must Be Filled Out");
+            return false;
+        }
+             
+                  if (captureAge == null || captureAge == ""){
+            
+            alert("Age Name Field Must Be Filled Out");
+            return false;
+        }
+          
+             
+        document.getElementById('formDemo').innerHTML = "CUSTOMER REGISTRATION INPUT:" + "<br>" + captureFirst + "<br>" + captureLast + "<br>" + captureEmail + "<br>" + captureAge + "<br>" + captureProduct;
+        document.getElementById('hiddenDiv').style.display = 'none'; 
+             
+        userReg.push(captureFirst,captureLast,captureEmail,captureAge,captureProduct);     
+        document.getElementById('formDemo3').innerHTML = userReg;
+             
+             document.getElementById("form5").innerHTML= "This is the product one object" + example1.example;
+    };
+
+        //
+        var userReg = [];
+        var cartArray = [];
+        
+        
+        function ProductDetails (name, price, quantity) {
+            
+            
+            this.name = name;
+            this.price = price;
+            this.quantity = quantity;    
+        }
+        
+        var oneprod = new ProductDetails(fname,"dogs","cats");
+        
+      var example1 = {example:"brids"}
+        
+
+          
+            
+        // rests cartCount to zero
+        //localStorage.setItem( "cartCount", 0);
+        var date = new Date();
+        var cartCount;
+
+        //Save form inputs to localStorage
+        function saveForm() {
+            //Get form values
+            var fname = document.getElementById('firstName').value;
+            var lname = document.getElementById('lastName').value;
+            var em = document.getElementById('email').value;
+            var age = document.getElementById('age').value;
+            var fp = document.getElementById('favoriteProduct').value;
+            var ship = document.getElementById('shipping').value;
+
+            //Save to localstorage
+            localStorage.setItem("firstname", fname);
+            localStorage.setItem("lastname", lname);
+            localStorage.setItem("email", em);
+            localStorage.setItem("age", age);
+            localStorage.setItem("favproduct", fp);
+            localStorage.setItem("cartcreated", 1);
+            localStorage.setItem("firstsetdate", date);
+            localStorage.setItem("shipping", ship);
+
+        }
+        
+        function getForm() {
+        
+            document.getElementById("form6").innerHTML="This is the user info is being captured in local storage" + "<br>" + localStorage.getItem("firstname") + "<br>" + localStorage.getItem("lastname") + "<br>" + localStorage.getItem("email") + "<br>" + localStorage.getItem("age") + "<br>" + localStorage.getItem("favproduct") + "<br>" + localStorage.getItem("shipping");
+            
+        }
+        
+        
+        
+        function saveCart() {
+            //Get cart values
+            var prodLocalS = document.getElementById('prodA').value;
+            var priceLocalS = document.getElementById('prodPrice').value;
+            var quantLocalQ = document.getElementById('quantA').value;
+           
+
+            //Save cart items to localstorage
+            localStorage.setItem("productname", prodLocalS);
+            localStorage.setItem("productprice", priceLocalS);
+            localStorage.setItem("productquantity", quantLocalQ);
+
+        }
+        
+         function getCart() {
+        
+            document.getElementById("form7").innerHTML="This is the cart info that is being captured in local storage" + "<br>" + localStorage.getItem("productname") + "<br>" + localStorage.getItem("productprice") + "<br>" + localStorage.getItem("productquantity");
+            
+        }
+        
+          
+        
+         function emptyCart() {
+        
+           localStorage.removeItem("productname");
+            localStorage.removeItem("productprice");
+             localStorage.removeItem("productquantity");
+         
+             document.getElementById("form7").innerHTML="Cart is now empty" + "<br>" + localStorage.getItem("productname") + "<br>" + localStorage.getItem("productprice") + "<br>" + localStorage.getItem("productquantity");
+                 
+           
+        }
+
+
+        //Adds items to the cart 
+        function addToCart(desc, prodId, price) {
+            
+            cartCount = localStorage.getItem("cartCount");
+
+            cartCount++;
+
+            localStorage.setItem("cartCount", cartCount);
+            showCartCount(cartCount);
+
+
+            //How would you save the actual product information (desc, prodId, price) to localStorage so that you can save multiple products and display them later on the view cart page? 
+
+        //Hints
+        // Put an object into storage
+        //localStorage.setItem('testObject', JSON.stringify(testObject));
+
+        // Retrieve the object from storage
+        //var retrievedObject = localStorage.getItem('testObject');
+
+        //console.log('retrievedObject:', JSON.parse(retrievedObject));
+   
+        }
+
+//        function showCartCount(cartCount) {
+//            document.getElementById('cartcount').innerHTML = "Items in Cart: " + cartCount;
+//        }
+//        showCartCount(localStorage.getItem("cartCount"));
+
+        // how do we empty the shopping cart? 
+
+
+        //Complete the function below so that we can not only reset 
+        //the count but also remove all the products when the user clicks an empty cart button. 
+//        function emptyCart() {} 
+
+
+      
+
+    </script>
+
+
+</body>
+
+</html>
